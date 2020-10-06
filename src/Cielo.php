@@ -54,10 +54,8 @@ class Cielo
 
             return $payment->getPaymentId();
         } catch (CieloRequestException $exception) {
-            $error = $exception->getCieloError();
-
-            if ($error) {
-                new IntegrationErrors($error);
+            if ($error = $exception->getCieloError()) {
+                throw new IntegrationErrorsException($error);
             } else {
                 throw new RuntimeException($exception->getMessage());
             }
@@ -74,7 +72,7 @@ class Cielo
             $error = $exception->getCieloError();
 
             if ($error) {
-                return new IntegrationErrors($error);
+                return new IntegrationErrorsException($error);
             } else {
                 throw new RuntimeException($exception->getMessage());
             }

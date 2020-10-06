@@ -10,9 +10,9 @@ use RuntimeException;
  *
  * @author  Matheus Lopes Santos <fale_com_lopez@hotmail.com>
  * @version 1.0.0
- * @package Cielo
+ * @package CSWeb\Cielo
  */
-class IntegrationErrors
+class IntegrationErrorsException extends RuntimeException
 {
     protected $errors = [
         100 => 'RequestId é obrigatório',
@@ -159,12 +159,10 @@ class IntegrationErrors
     {
         $code = $error->getCode();
 
-        if ( array_key_exists($code, $this->errors) ) {
-            throw new RuntimeException(
-                $this->errors[$code]
-            );
-        }
+        $message = array_key_exists($code, $this->errors)
+            ? $this->errors[$code]
+            : $error->getMessage();
 
-        throw new RuntimeException($error->getMessage());
+        parent::__construct($message, $code);
     }
 }
